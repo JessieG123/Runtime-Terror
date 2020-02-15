@@ -2,24 +2,24 @@ import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 
-public class Playerhandle{
+public class Playerhandle extends Player{
 
     @Override
     public void handle(KeyEvent event){
         if(event.getCode() == keyCode.W){
-            //do something when up key is pressed
+            Player.setJump(True);  
         }
         if(event.getCode() == keyCode.A){
-            //do something when down key is pressed
+            Player.setLeft(True);
         }
         if(event.getCode() == keyCode.S){
-            //do something when left key is pressed
+            Player.setDown(True);
         }
-        if(event.getCode() == keyCode.DT){
-            //do something when left key 
+        if(event.getCode() == keyCode.D){
+            Player.setRight(True);
         }
         if(event.getCode() == keyCode.SPACE){
-            //do something when space is pressed 
+            Player.setShootBullets(True);
         }
     }
 

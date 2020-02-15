@@ -1,152 +1,79 @@
-import java.awt.Rectangle;
 
-public class Player {
-    // The Players instance Variables
-    private int x_coordinate;
-    private int y_coordinate;
-    private int width;
-    private int height;
-    private boolean isAlive;
-    private boolean inAir;
+public abstract class Player extends Character{
 
-    /**
-     * Player constructor that takes in the x and y coordinates as well as the width
-     * and height of the player
-     * 
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     */
-    public Player(int x, int y, int w, int h) {
-        this.x_coordinate = x;
-        this.y_coordinate = y;
-        this.width = w;
-        this.height = h;
-        this.isAlive = true;
-        this.inAir = false;
+    //player class logic. need to be able to move around 
+    //check life
+
+    private int lifeRemaining;
+    private boolean jump;
+    private boolean left;
+    private boolean right;
+    private boolean down;
+    private boolean shootBullets;
+
+    //constructors
+    public Player(){
+
+    }
+    
+    public Player(int lifeRemaining, boolean jump, boolean left, boolean right, boolean down, boolean shootBullets){
+        this.lifeRemaning = lifeRemaining;
+        this.jump = jump;
+        this.left = left;
+        this.right = right;
+        this.down = down;
+        this.shootBullets = shootBullets;
+    }
+    
+    //setters
+    public int setLifeRemaining(int lifeRemaining){
+        this.lifeRemaining = lifeRemaining;
     }
 
-    // Getters
-    /**
-     * Returns the player's x-coordinate
-     * 
-     * @return x_coordinate
-     */
-    public int getX_Coordinate() {
-        return x_coordinate;
+    public boolean setJump(boolean jump){
+        this.jump = jump;
     }
 
-    /**
-     * Returns the player's y-coordinate
-     * 
-     * @return
-     */
-    public int getY_Coordinate() {
-        return y_coordinate;
+    public boolean setLeft(boolean left){
+        this.left = left;
     }
 
-    /**
-     * Returns the player's width
-     * 
-     * @return
-     */
-    public int getWidth() {
-        return width;
+    public boolean setRight(boolean right){
+        this.right = right;
     }
 
-    /**
-     * Returns the player's height
-     * 
-     * @return
-     */
-    public int getHeight() {
-        return height;
+    public boolean setDown(boolean down){
+        this.down = down;
     }
 
-    /**
-     * Returns the life of the player
-     * 
-     * @return
-     */
-    public boolean getIsAlive() {
-        return isAlive;
+    public boolean setShootBullets(boolean shootBullets){
+        this.shootBullets = shootBullets;
     }
 
-    public boolean getInAir() {
-        return inAir;
+    //getters
+    public int getLifeRemaining(){
+        return lifeRemaining;
     }
 
-    // Setters
-    /**
-     * Sets the player's x-coordinate
-     * 
-     * @param a
-     */
-    public void setXCoordinate(int a) {
-        x_coordinate = a;
+    public boolean getJump(){
+        return jump;
     }
 
-    /**
-     * Sets the player's y coordinate
-     * 
-     * @param a
-     */
-    public void setYCoordinate(int a) {
-        y_coordinate = a;
+    public boolean getLeft(){
+        return left;
     }
 
-    /**
-     * Sets the player's state
-     * 
-     * @param state
-     */
-    public void setIsAlive(boolean state) {
-        if (isAlive != state)
-            isAlive = state;
+    public boolean getDown(){
+        return down;
     }
 
-    /**
-     * Sets the player's width
-     * 
-     * @param aWidth
-     */
-    public void setWidth(int aWidth) {
-        width = aWidth;
+    public boolean getRight(){
+        return right;
+    }
+    public boolean getShootBullets(){
+        return shootBullets;
     }
 
-    /**
-     * Sets the player's height
-     * 
-     * @param aHeight
-     */
-    public void setHeight(int aHeight) {
-        height = aHeight;
-    }
-
-    public void setInAir(boolean x){
-        if (inAir != x){
-            inAir = x;
-        }
-    }
-
-    // Movement
-    /**
-     * Moves the object up
-     * 
-     * @param distance
-     */
-    public void moveUp(int distance) {
-        y_coordinate -= distance;
-    }
-
-    // Hitbox
-    /**
-     * Returns the position and dimensions of the unit's hitbox
-     * 
-     * @return
-     */
-    public Rectangle getUnitHitBox() {
-        return new Rectangle(x_coordinate, y_coordinate, width, height);
-    }
+    
+    public abstract void handle(KeyEvent event);
 }
