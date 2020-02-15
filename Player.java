@@ -10,6 +10,7 @@ public abstract class Player extends Character{
     private boolean down;
     private boolean shootBullets;
 
+    //constructors
     public Player(){
 
     }
@@ -22,6 +23,8 @@ public abstract class Player extends Character{
         this.down = down;
         this.shootBullets = shootBullets;
     }
+    
+    //setters
     public int setLifeRemaining(int lifeRemaining){
         this.lifeRemaining = lifeRemaining;
     }
@@ -46,6 +49,7 @@ public abstract class Player extends Character{
         this.shootBullets = shootBullets;
     }
 
+    //getters
     public int getLifeRemaining(){
         return lifeRemaining;
     }
@@ -69,6 +73,7 @@ public abstract class Player extends Character{
         return shootBullets;
     }
 
+    
     public abstract void handle(KeyEvent event);
 
     
