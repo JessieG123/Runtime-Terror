@@ -1,3 +1,4 @@
+
 public abstract class Player extends Character{
 
     //player class logic. need to be able to move around 
@@ -75,9 +76,4 @@ public abstract class Player extends Character{
 
     
     public abstract void handle(KeyEvent event);
-
-    
-
-
-
 }
