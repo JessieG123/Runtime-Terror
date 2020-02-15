@@ -10,8 +10,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 import java.io.*;
+import java.util.*;
 
 public class GUI extends Application{
+
+    private ArrayList<Walls> theWalls = new ArrayList<Walls>();
+    private ArrayList<Rectangle> theWallsSprites = new ArrayList<Rectangle>();
+
+    private ArrayList<Walls> theFloors = new ArrayList<Walls>();
+    private ArrayList<Rectangle> theFloorsSprites = new ArrayList<Rectangle>();
+
 
     @Override
     public void start(Stage stage) {
@@ -21,25 +29,31 @@ public class GUI extends Application{
 
         Player player = new Player(750,425,80,20);
         Rectangle playerSprite = new Rectangle(25,60);
-        playerSprite.relocate(player.getX_Coordinate(), player.getY_Coordinate()-30);
+        playerSprite.relocate(player.getX_Coordinate(), player.getY_Coordinate()-40);
 
         Walls floor = new Walls(0,525,10000,100, true);
         Rectangle floorSprite = new Rectangle(10000,100);
         floorSprite.relocate(floor.getX(),floor.getY());
+        theFloors.add(floor);
+        theFloorsSprites.add(floorSprite);
 
         AnimationTimer gravity = new AnimationTimer() {
 
             @Override
             public void handle(long now){
-    
-                if (player.getUnitHitBox().intersects(floor.getUnitHitBox()) == false){
-                    floor.setY(floor.getY() - 15);
-                    floorSprite.relocate(floor.getX(),floor.getY());
-                } else {
-                    player.setInAir(false);
-                    player.setMaxJump(false);
-                }
-    
+                
+                if (player.getIsAlive()){
+                    for (int i = 0; i < theFloors.size(); i++){
+                        if (player.getUnitHitBox().intersects(theFloors.get(i).getUnitHitBox()) == false){
+                            theFloors.get(i).setY(theFloors.get(i).getY() - 15);
+                            theFloorsSprites.get(i).relocate(theFloors.get(i).getX(),theFloors.get(i).getY());
+                        } else {
+                            player.setInAir(false);
+                        }
+                    }
+                    if (theFloors.size() > 0 && theFloors.get(0).getY() < 0)
+                        player.setIsAlive(false);
+                } 
             }
     
         };
@@ -49,11 +63,14 @@ public class GUI extends Application{
             @Override
             public void handle(long now){
 
-                if (player.getJumping() == true && player.getMaxJump() == false){
-                    floor.setY(floor.getY() + 20);
-                    floorSprite.relocate(floor.getX(),floor.getY());
+                if (player.getIsAlive()){
+                    for (int i = 0; i < theFloors.size(); i++){
+                        if (player.getJumping()){
+                            theFloors.get(i).setY(theFloors.get(i).getY() + 20);
+                            theFloorsSprites.get(i).relocate(theFloors.get(i).getX(),theFloors.get(i).getY());
+                        }
+                    }    
                 }
-
             }
 
         };
@@ -119,13 +136,30 @@ public class GUI extends Application{
 
             @Override
             public void handle(long now){
-                if (player.getMovingRight() == true) {
-                    floor.setX(floor.getX() - 10);
-                    floorSprite.relocate(floor.getX(),floor.getY());
-                }
-                if (player.getMovingLeft() == true) {
-                    floor.setX(floor.getX() + 10);
-                    floorSprite.relocate(floor.getX(),floor.getY());
+
+                if (player.getIsAlive()){
+                    for (int i = 0; i < theFloors.size(); i++){
+                        if (player.getMovingRight() == true) {
+                            theFloors.get(i).setX(theFloors.get(i).getX() - 10);
+                            theFloorsSprites.get(i).relocate(theFloors.get(i).getX(),theFloors.get(i).getY());
+                            for (int j = 0; j < theWalls.size(); j++){
+                                if (player.getUnitHitBox().intersects(theWalls.get(i).getUnitHitBox())){
+                                    theWalls.get(i).setX(theWalls.get(i).getX() + 1);
+                                    theWallsSprites.get(i).relocate(theWalls.get(i).getX(),theWalls.get(i).getY());
+                                }
+                            }
+                        }
+                        if (player.getMovingLeft() == true) {
+                            theFloors.get(i).setX(theFloors.get(i).getX() + 10);
+                            theFloorsSprites.get(i).relocate(theFloors.get(i).getX(),theFloors.get(i).getY());
+                            for (int j = 0; j < theWalls.size(); j++){
+                                if (player.getUnitHitBox().intersects(theWalls.get(i).getUnitHitBox())){
+                                    theWalls.get(i).setX(theWalls.get(i).getX() - 1);
+                                    theWallsSprites.get(i).relocate(theWalls.get(i).getX(),theWalls.get(i).getY());
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
