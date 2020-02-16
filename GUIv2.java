@@ -140,10 +140,32 @@ public class GUIv2 extends Application{
                     if (player.getMovingRight()){
                         player.setXCoordinate(player.getX_Coordinate() + 5);
                         playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                        if (player.getX_Coordinate() > 1490){
+                            player.setXCoordinate(0);
+                            for (int l = 0; l < theFloors.size(); l++){
+                                theFloors.get(l).setX(theFloors.get(l).getX() - 1500);
+                                theFloorsSprites.get(l).setX(theFloors.get(l).getX());
+                            }
+                            for (int r = 0; r < theWalls.size(); r++){
+                                theWalls.get(r).setX(theWalls.get(r).getX() - 1500);
+                                theWallsSprites.get(r).setX(theWalls.get(r).getX());
+                            }
+                        }
                     }
                     if (player.getMovingLeft()){
                         player.setXCoordinate(player.getX_Coordinate() - 5);
                         playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                        if (player.getX_Coordinate() < 10){
+                            player.setXCoordinate(1500);
+                            for (int l = 0; l < theFloors.size(); l++){
+                                theFloors.get(l).setX(theFloors.get(l).getX() + 1500);
+                                theFloorsSprites.get(l).setX(theFloors.get(l).getX());
+                            }
+                            for (int r = 0; r < theWalls.size(); r++){
+                                theWalls.get(r).setX(theWalls.get(r).getX() + 1500);
+                                theWallsSprites.get(r).setX(theWalls.get(r).getX());
+                            }
+                        }
                     }
                 }
             }
