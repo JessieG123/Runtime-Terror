@@ -79,9 +79,11 @@ public class GUI extends Application{
             @Override
             public void handle(KeyEvent event) {
 
-                int initalY = player.getY_Coordinate();
-
                 if(event.getCode() == KeyCode.W){
+
+                    int initalY = floor.getY();
+                    System.out.println(initalY);
+                    
                     if (player.getInAir() == false){
                         player.setInAir(true);
                         player.setJumping(true);
