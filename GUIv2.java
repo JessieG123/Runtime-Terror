@@ -51,9 +51,21 @@ public class GUIv2 extends Application{
                             player.setInAir(false);
                         }
                     }
-                    if (theFloors.size() > 0 && theFloors.get(0).getY() < 0)
+                    if (theFloors.size() > 0 && theFloors.get(0).getY() < 0){
                         player.setIsAlive(false);
-                } 
+                    }  
+                    if (player.getY_Coordinate() > 1490){
+                        player.setYCoordinate(0);
+                        for (int l = 0; l < theFloors.size(); l++){
+                            theFloors.get(l).setY(theFloors.get(l).getY() - 1500);
+                            theFloorsSprites.get(l).setY(theFloors.get(l).getY());
+                        }
+                        for (int r = 0; r < theWalls.size(); r++){
+                            theWalls.get(r).setY(theWalls.get(r).getY() - 1500);
+                            theWallsSprites.get(r).setY(theWalls.get(r).getY());
+                        }
+                    }
+                }   
             }
     
         };
@@ -68,6 +80,17 @@ public class GUIv2 extends Application{
                         if (player.getJumping()){
                             player.setYCoordinate(player.getY_Coordinate() - 20);
                             playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                        }
+                        if (player.getY_Coordinate() < 10){
+                            player.setYCoordinate(1500);
+                            for (int l = 0; l < theFloors.size(); l++){
+                                theFloors.get(l).setY(theFloors.get(l).getY() + 1500);
+                                theFloorsSprites.get(l).setY(theFloors.get(l).getY());
+                            }
+                            for (int r = 0; r < theWalls.size(); r++){
+                                theWalls.get(r).setY(theWalls.get(r).getY() + 1500);
+                                theWallsSprites.get(r).setY(theWalls.get(r).getY());
+                            }
                         }
                     }    
                 }
