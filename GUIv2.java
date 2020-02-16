@@ -20,7 +20,6 @@ public class GUIv2 extends Application{
     private ArrayList<Walls> theFloors = new ArrayList<Walls>();
     private ArrayList<Rectangle> theFloorsSprites = new ArrayList<Rectangle>();
 
-
     @Override
     public void start(Stage stage) {
         
@@ -31,11 +30,17 @@ public class GUIv2 extends Application{
         Rectangle playerSprite = new Rectangle(25,60);
         playerSprite.relocate(player.getX_Coordinate(), player.getY_Coordinate());
 
-        Walls floor = new Walls(0,525,10000,100, true);
-        Rectangle floorSprite = new Rectangle(10000,100);
+        Walls floor = new Walls(-50,825,10000,50, true);
+        Rectangle floorSprite = new Rectangle(10000,50);
         floorSprite.relocate(floor.getX(),floor.getY());
         theFloors.add(floor);
         theFloorsSprites.add(floorSprite);
+
+        Walls wall = new Walls(650,800,100,50, true);
+        Rectangle wallSprite = new Rectangle(100,50);
+        wallSprite.relocate(wall.getX(),wall.getY());
+        theWalls.add(wall);
+        theWallsSprites.add(wallSprite);
 
         AnimationTimer gravity = new AnimationTimer() {
 
@@ -53,19 +58,19 @@ public class GUIv2 extends Application{
                     }
                     if (theFloors.size() > 0 && theFloors.get(0).getY() < 0){
                         player.setIsAlive(false);
-                    }  
-                    if (player.getY_Coordinate() > 1490){
+                    }
+                    if (player.getY_Coordinate() > 950){
                         player.setYCoordinate(0);
                         for (int l = 0; l < theFloors.size(); l++){
-                            theFloors.get(l).setY(theFloors.get(l).getY() - 1500);
-                            theFloorsSprites.get(l).setY(theFloors.get(l).getY());
+                            theFloors.get(l).setY(theFloors.get(l).getY() - 950);
+                            theFloorsSprites.get(l).setY(theFloorsSprites.get(l).getY() - 950);
                         }
                         for (int r = 0; r < theWalls.size(); r++){
-                            theWalls.get(r).setY(theWalls.get(r).getY() - 1500);
-                            theWallsSprites.get(r).setY(theWalls.get(r).getY());
+                            theWalls.get(r).setY(theWalls.get(r).getY() - 950);
+                            theWallsSprites.get(r).setY(theWallsSprites.get(r).getY() - 950);
                         }
                     }
-                }   
+                } 
             }
     
         };
@@ -76,23 +81,21 @@ public class GUIv2 extends Application{
             public void handle(long now){
 
                 if (player.getIsAlive()){
-                    for (int i = 0; i < theFloors.size(); i++){
-                        if (player.getJumping()){
-                            player.setYCoordinate(player.getY_Coordinate() - 20);
-                            playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                    if (player.getJumping()){
+                        player.setYCoordinate(player.getY_Coordinate() - 20);
+                        playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                    }
+                    if (player.getY_Coordinate() < 0){
+                        player.setYCoordinate(950);
+                        for (int l = 0; l < theFloors.size(); l++){
+                            theFloors.get(l).setY(theFloors.get(l).getY() + 950);
+                            theFloorsSprites.get(l).setY(theFloorsSprites.get(l).getY() + 950);
                         }
-                        if (player.getY_Coordinate() < 10){
-                            player.setYCoordinate(1500);
-                            for (int l = 0; l < theFloors.size(); l++){
-                                theFloors.get(l).setY(theFloors.get(l).getY() + 1500);
-                                theFloorsSprites.get(l).setY(theFloors.get(l).getY());
-                            }
-                            for (int r = 0; r < theWalls.size(); r++){
-                                theWalls.get(r).setY(theWalls.get(r).getY() + 1500);
-                                theWallsSprites.get(r).setY(theWalls.get(r).getY());
-                            }
+                        for (int r = 0; r < theWalls.size(); r++){
+                            theWalls.get(r).setY(theWalls.get(r).getY() + 950);
+                            theWallsSprites.get(r).setY(theWallsSprites.get(r).getY() + 950);
                         }
-                    }    
+                    }
                 }
             }
 
@@ -148,7 +151,13 @@ public class GUIv2 extends Application{
         });
 
         root.getChildren().add(playerSprite);
-        root.getChildren().add(floorSprite);
+
+        for (int i = 0; i < theFloorsSprites.size(); i++){
+            root.getChildren().add(theFloorsSprites.get(i));
+        }
+        for (int i = 0; i < theWallsSprites.size(); i++){
+            root.getChildren().add(theWallsSprites.get(i));
+        }
 
         stage.setTitle("Cowboy");
         stage.setScene(scene);
@@ -163,6 +172,12 @@ public class GUIv2 extends Application{
                     if (player.getMovingRight()){
                         player.setXCoordinate(player.getX_Coordinate() + 5);
                         playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                        for (int i = 0; i < theWalls.size(); i++){
+                            if (player.getUnitHitBox().intersects(theWalls.get(i).getUnitHitBox())){
+                                player.setXCoordinate(player.getX_Coordinate() - 6);
+                                playerSprite.setX(player.getX_Coordinate());
+                            }
+                        }
                         if (player.getX_Coordinate() > 1490){
                             player.setXCoordinate(0);
                             for (int l = 0; l < theFloors.size(); l++){
@@ -171,13 +186,19 @@ public class GUIv2 extends Application{
                             }
                             for (int r = 0; r < theWalls.size(); r++){
                                 theWalls.get(r).setX(theWalls.get(r).getX() - 1500);
-                                theWallsSprites.get(r).setX(theWalls.get(r).getX());
+                                theWallsSprites.get(r).setX(theWallsSprites.get(r).getX() - 1500);
                             }
                         }
                     }
                     if (player.getMovingLeft()){
                         player.setXCoordinate(player.getX_Coordinate() - 5);
                         playerSprite.relocate(player.getX_Coordinate(),player.getY_Coordinate());
+                        for (int i = 0; i < theWalls.size(); i++){
+                            if (player.getUnitHitBox().intersects(theWalls.get(i).getUnitHitBox())){
+                                player.setXCoordinate(player.getX_Coordinate() + 6);
+                                playerSprite.setX(player.getX_Coordinate());
+                            }
+                        }
                         if (player.getX_Coordinate() < 10){
                             player.setXCoordinate(1500);
                             for (int l = 0; l < theFloors.size(); l++){
@@ -186,7 +207,7 @@ public class GUIv2 extends Application{
                             }
                             for (int r = 0; r < theWalls.size(); r++){
                                 theWalls.get(r).setX(theWalls.get(r).getX() + 1500);
-                                theWallsSprites.get(r).setX(theWalls.get(r).getX());
+                                theWallsSprites.get(r).setX(theWallsSprites.get(r).getX() + 1500);
                             }
                         }
                     }
